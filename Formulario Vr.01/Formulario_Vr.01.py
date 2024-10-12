@@ -55,7 +55,6 @@ def es_texto_valido(valor):
     return bool(re.match("^[a-zA-Z\s]+$", valor))
 
 def guardar_valores():
-
     nombre = tbNombre.get()
     apellidos = tbApellidos.get()
     edad = tbEdad.get()
@@ -84,12 +83,9 @@ def guardar_valores():
     elif var_genero.get() == 2:
         genero = "Mujer"
 
-    datos = f"Nombres: {nombre}\nApellidos: {apellidos}\nEdad: {edad} años\nEstatura: {estatura} cm\nTelefono: {telefono}\nGenero: {genero}\n"
+    insertar_en_bd(nombre, apellidos, edad, estatura, telefono, genero)
 
-    with open(r"C:\Users\fergu\OneDrive\Escritorio\GUARDAR_DATOS\datos2.txt", "a") as archivo:
-        archivo.write(datos + "\n\n")
-        messagebox.showinfo("Éxito", "Los datos se guardaron correctamente")
-
+    messagebox.showinfo("Éxito", "Los datos se guardaron correctamente en la base de datos.")
     limpiar_campos()
 
 ventana = tk.Tk()
@@ -98,7 +94,7 @@ ventana.title("Formulario Vr.01")
 
 var_genero = tk.IntVar()
 
-# interfaz
+# Interfaz
 lbNombre = tk.Label(ventana, text="Nombre: ")
 lbNombre.pack()
 tbNombre = tk.Entry(ventana)
@@ -109,7 +105,7 @@ lbApellidos.pack()
 tbApellidos = tk.Entry(ventana)
 tbApellidos.pack()
 
-lbTelefono = tk.Label(ventana, text="Telefono: ")
+lbTelefono = tk.Label(ventana, text="Teléfono: ")
 lbTelefono.pack()
 tbTelefono = tk.Entry(ventana)
 tbTelefono.pack()
@@ -124,14 +120,13 @@ lbEstatura.pack()
 tbEstatura = tk.Entry(ventana)
 tbEstatura.pack()
 
-lbGenero = tk.Label(ventana, text="\nGenero: ")
+lbGenero = tk.Label(ventana, text="\nGénero: ")
 lbGenero.pack()
 rbHombre = tk.Radiobutton(ventana, text="Hombre", variable=var_genero, value=1)
 rbHombre.pack()
 
 rbMujer = tk.Radiobutton(ventana, text="Mujer", variable=var_genero, value=2)
 rbMujer.pack()
-
 
 btnGuardar = tk.Button(ventana, text="Guardar", command=guardar_valores)
 btnGuardar.pack()
