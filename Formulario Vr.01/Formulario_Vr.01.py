@@ -1,6 +1,31 @@
 ﻿import tkinter as tk
 from tkinter import messagebox
 import re
+import mysql.connector
+
+def insertar_en_bd(nombres, apellidos, edad, estatura, telefono, genero):
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            port="3306",
+            database="ProgAvanLFVO",
+            user="root",
+            password="Rocket2014"
+        )
+        cursor = connection.cursor()
+
+        insert_query = """
+        INSERT INTO registros (Nombre, Apellidos, Edad, Estatura, Telefono, Genero)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(insert_query, (nombres, apellidos, edad, estatura, telefono, genero))
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    except mysql.connector.Error as error:
+        messagebox.showerror("Error", f"Error al insertar en la base de datos: {error}")
 
 def limpiar_campos():
     tbNombre.delete(0, tk.END)
@@ -13,7 +38,6 @@ def limpiar_campos():
 def borrar():
     limpiar_campos()
 
-# validaciones
 def es_entero_valido(valor):
     return valor.isdigit()
 
@@ -54,7 +78,6 @@ def guardar_valores():
         messagebox.showerror("Error", "Por favor, ingrese un teléfono de 10 dígitos.")
         return
 
-    # Radiobutton
     genero = ""
     if var_genero.get() == 1:
         genero = "Hombre"
@@ -63,12 +86,10 @@ def guardar_valores():
 
     datos = f"Nombres: {nombre}\nApellidos: {apellidos}\nEdad: {edad} años\nEstatura: {estatura} cm\nTelefono: {telefono}\nGenero: {genero}\n"
 
-    # Guardar los datos
     with open(r"C:\Users\fergu\OneDrive\Escritorio\GUARDAR_DATOS\datos2.txt", "a") as archivo:
         archivo.write(datos + "\n\n")
         messagebox.showinfo("Éxito", "Los datos se guardaron correctamente")
 
-    # Limpiar los campos
     limpiar_campos()
 
 ventana = tk.Tk()
